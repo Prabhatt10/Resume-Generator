@@ -1,6 +1,8 @@
 const userModel = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
+const blacklistModel = require('../models/blacklist.model');
+const authMiddleware = require('../middleware/auth.middleware')
 
 async function registerController(req,res) {
     try {
@@ -17,7 +19,6 @@ async function registerController(req,res) {
             $or : [{userName}, {email}]
         });
 
-        // FIXED
         if(isUserAlreadyExist){
             return res.status(400).json({
                 message:"User Already Exist"
@@ -32,7 +33,6 @@ async function registerController(req,res) {
             password: hashedPassword
         })
 
-        // FIXED
         const token = jwt.sign(
             { 
                 id: newUser.id,
@@ -42,7 +42,7 @@ async function registerController(req,res) {
             {expiresIn: "1d"}
         )
 
-        res.cookie("jwt", token)
+        res.cookie("token", token)
 
         res.status(201).json({
             message: "User Created Successfully",
@@ -98,7 +98,7 @@ async function loginController(req,res) {
             { expiresIn: "1d"}
         )
 
-        res.cookie("jwt", token)
+        res.cookie("token", token)
 
         res.status(200).json({
             message: "User Logged In Successfully",
@@ -117,4 +117,57 @@ async function loginController(req,res) {
     }
 }
 
-module.exports = {registerController,loginController}
+async function logoutController(req,res){
+    try {
+        const token = req.cookies.token;
+        
+        if(!token){
+            return res.status(400).json({
+                message: "No Token Found"
+            })
+        }
+
+        await blacklistModel.create({
+            token
+        });
+
+        return res.status(200).json({
+            message: "User Logged Out Successfully"
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: "Internal Server Error in logout"
+        })
+    }   
+}
+
+async function getMeController(req,res){
+    try{
+        const user = await userModel.findById(req.user.id);
+        if(!user){
+            return res.status(404).json({
+                message: "User Not Found"
+            })
+        }
+        return res.status(200).json({
+            message: "User Found Successfully",
+            userModel : {
+                id : user._id,
+                userName : user.userName,
+                email : user.email,
+            }
+        })
+    } catch(error){
+        console.log(error);
+        return res.status(500).json({
+            message: "Internal Server Error in getMe"
+        })
+    }
+}
+
+module.exports={registerController,
+                loginController,
+                logoutController,
+                getMeController,
+            }
