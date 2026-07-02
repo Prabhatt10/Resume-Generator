@@ -1,16 +1,1 @@
 @import "tailwindcss";
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-    color: rgb(223, 220, 220);
-}
-
-html,
-body,
-#root {
-    width: 100%;
-    background-color: #282828;
-}
