@@ -44,14 +44,15 @@ async function registerController(req,res) {
 
         res.cookie("token", token)
 
-        res.status(201).json({
-            message: "User Created Successfully",
-            userModel : {
-                id : newUser._id,
-                userName : newUser.userName,
-                email : newUser.email,
-            }
-        })
+        return res.status(200).json({
+            success: true,
+            message: "User created successfully",
+            user: {
+                id: newUser._id,
+                userName: newUser.userName,
+                email: newUser.email,
+            },
+        });
 
     } catch (error) {
         console.log(error);
@@ -61,59 +62,122 @@ async function registerController(req,res) {
     }
 }
 
-async function loginController(req,res) {
+// async function loginController(req,res) {
 
+//     try {
+
+//         const {email, password} = req.body;
+
+//         if(!email || !password){
+//             return res.status(400).json({
+//                 message:"All Fields are required"
+//             })
+//         }
+
+//         const user = await userModel.findOne({email})
+
+//         if(!user){
+//             return res.status(400).json({
+//                 message:"User Not Found"
+//             })
+//         }
+
+//         const isPasswordValid = await bcrypt.compare(password, user.password)
+
+//         if(!isPasswordValid){
+//             return res.status(400).json({
+//                 message:"Invalid Password"
+//             })
+//         }
+
+//         const token = jwt.sign(
+//             { 
+//                 id: user.id,
+//                 userName: user.userName
+//             },
+//             process.env.JWT_SECRET,
+//             { expiresIn: "1d"}
+//         )
+
+//         res.cookie("token", token)
+
+//         res.status(200).json({
+//             message: "User Logged In Successfully",
+//             userModel : {
+//                 id : user._id,
+//                 userName : user.userName,
+//                 email : user.email,
+//             }
+//         })
+
+//     } catch (error) {
+//         console.log(error);
+//         return res.status(500).json({
+//             message: "Internal Server Error in login"
+
+//         })
+//     }
+// }
+
+async function loginController(req, res) {
     try {
+        const { email, password } = req.body;
 
-        const {email, password} = req.body;
-
-        if(!email || !password){
+        if (!email || !password) {
             return res.status(400).json({
-                message:"All Fields are required"
-            })
+                success: false,
+                message: "All fields are required",
+            });
         }
 
-        const user = await userModel.findOne({email})
+        const user = await userModel.findOne({ email });
 
-        if(!user){
+        if (!user) {
             return res.status(400).json({
-                message:"User Not Found"
-            })
+                success: false,
+                message: "User not found",
+            });
         }
 
-        const isPasswordValid = await bcrypt.compare(password, user.password)
+        const isPasswordValid = await bcrypt.compare(password, user.password);
 
-        if(!isPasswordValid){
+        if (!isPasswordValid) {
             return res.status(400).json({
-                message:"Invalid Password"
-            })
+                success: false,
+                message: "Invalid password",
+            });
         }
 
         const token = jwt.sign(
-            { 
-                id: user.id,
-                userName: user.userName
+            {
+                id: user._id,
+                userName: user.userName,
             },
             process.env.JWT_SECRET,
-            { expiresIn: "1d"}
-        )
+            { expiresIn: "1d" }
+        );
 
-        res.cookie("token", token)
+        res.cookie("token", token, {
+            httpOnly: true,
+        });
 
-        res.status(200).json({
-            message: "User Logged In Successfully",
-            userModel : {
-                id : user._id,
-                userName : user.userName,
-                email : user.email,
-            }
-        })
+        return res.status(200).json({
+            success: true,
+            message: "Login successful",
+            user: {
+                id: user._id,
+                userName: user.userName,
+                email: user.email,
+            },
+        });
 
     } catch (error) {
         console.log(error);
+
         return res.status(500).json({
-            message: "Internal Server Error in login"
-        })
+            success: false,
+            message: "Internal Server Error",
+        });
     }
 }
 
@@ -151,13 +215,14 @@ async function getMeController(req,res){
             })
         }
         return res.status(200).json({
-            message: "User Found Successfully",
-            userModel : {
-                id : user._id,
-                userName : user.userName,
-                email : user.email,
-            }
-        })
+            success: true,
+            message: "User Found",
+            user: {
+                id: user._id,
+                userName: user.userName,
+                email: user.email,
+            },
+        });
     } catch(error){
         console.log(error);
         return res.status(500).json({
