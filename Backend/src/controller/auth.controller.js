@@ -42,7 +42,12 @@ async function registerController(req,res) {
             {expiresIn: "1d"}
         )
 
-        res.cookie("token", token)
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+            maxAge: 24 * 60 * 60 * 1000
+        });
 
         return res.status(200).json({
             success: true,
@@ -61,63 +66,6 @@ async function registerController(req,res) {
         })
     }
 }
-
-// async function loginController(req,res) {
-
-//     try {
-
-//         const {email, password} = req.body;
-
-//         if(!email || !password){
-//             return res.status(400).json({
-//                 message:"All Fields are required"
-//             })
-//         }
-
-//         const user = await userModel.findOne({email})
-
-//         if(!user){
-//             return res.status(400).json({
-//                 message:"User Not Found"
-//             })
-//         }
-
-//         const isPasswordValid = await bcrypt.compare(password, user.password)
-
-//         if(!isPasswordValid){
-//             return res.status(400).json({
-//                 message:"Invalid Password"
-//             })
-//         }
-
-//         const token = jwt.sign(
-//             { 
-//                 id: user.id,
-//                 userName: user.userName
-//             },
-//             process.env.JWT_SECRET,
-//             { expiresIn: "1d"}
-//         )
-
-//         res.cookie("token", token)
-
-//         res.status(200).json({
-//             message: "User Logged In Successfully",
-//             userModel : {
-//                 id : user._id,
-//                 userName : user.userName,
-//                 email : user.email,
-//             }
-//         })
-
-//     } catch (error) {
-//         console.log(error);
-//         return res.status(500).json({
-//             message: "Internal Server Error in login"
-
-//         })
-//     }
-// }
 
 async function loginController(req, res) {
     try {
@@ -159,6 +107,9 @@ async function loginController(req, res) {
 
         res.cookie("token", token, {
             httpOnly: true,
+            secure: false,
+            sameSite: "lax",
+            maxAge: 24 * 60 * 60 * 1000
         });
 
         return res.status(200).json({
@@ -209,6 +160,7 @@ async function logoutController(req,res){
 async function getMeController(req,res){
     try{
         const user = await userModel.findById(req.user.id);
+        // console.log("Error in getMeCOntroller", error);
         if(!user){
             return res.status(404).json({
                 message: "User Not Found"

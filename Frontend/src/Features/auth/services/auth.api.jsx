@@ -48,15 +48,18 @@ export async function logout() {
     }
 }
 
-export async function getMe(){
-    try{
-        const response = await api.get("/api/auth/get-me", {
-            withCredentials: true
-        })
+export async function getMe() {
+    try {
+        const response = await api.get("/api/auth/get-me");
+
         return response.data;
-    }
-    catch (error) {
-        console.log("Get user failed:", error.response.data);
+
+    } catch (error) {
+        console.log(
+            "Get user failed:",
+            error.response?.data || error.message
+        );
+
         throw error;
     }
 }
