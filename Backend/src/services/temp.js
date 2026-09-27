@@ -80,7 +80,7 @@ const resume = `
     Competitive Programming, Artificial Intelligence, Web Development, Cloud Computing, Open Source
 `
 
-const selfDEscription = `
+const selfDescription = `
 I am a motivated and passionate Computer Science student with a strong interest in Full Stack Development, 
 Artificial Intelligence, and problem-solving. I have experience working with technologies such as React.js,
 Node.js, Express.js, MongoDB, and JavaScript. I enjoy building practical projects that solve real-world 
@@ -128,6 +128,6 @@ const jobDescription = `
 
 module.exports = {
     resume,
-    selfDEscription,
+    selfDescription,
     jobDescription
 }
