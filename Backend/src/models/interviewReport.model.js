@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+// const User = require("./user.model.js");
 
 const technicalQuestionSchema = new mongoose.Schema ( {
     question : {
@@ -83,7 +84,11 @@ const interviewReportSchema = new mongoose.Schema({
     technicalQuestions : [technicalQuestionSchema],
     behaviouralQuestions : [behaviouralQuestionSchema],
     skillGaps : [skillGapSchema],
-    preparationPlan : [preparationPlanSchema]
+    preparationPlan : [preparationPlanSchema],
+    user : {
+        type : mongoose.Schema.Types.ObjectId,
+        ref : "User",
+    }
 });
 
 

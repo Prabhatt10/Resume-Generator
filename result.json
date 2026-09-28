@@ -1,0 +1,84 @@
+{
+  "matchScore": 85,
+  "technicalQuestions": [
+    {
+      "question": "How do you handle state management in a complex React application, and when would you choose Redux over the Context API?",
+      "intention": "To test deep knowledge of React ecosystem and decision-making skills regarding architecture.",
+      "answer": "Explain that Context is suitable for low-frequency state updates like theme or auth, while Redux is better for global, complex state with high-frequency updates. Mention middleware and devtools as benefits."
+    },
+    {
+      "question": "Can you explain the difference between a monolithic and a microservices architecture, and how might you secure an API built with Express.js?",
+      "intention": "To assess backend architectural understanding and security awareness, which is vital for this role.",
+      "answer": "Define the monolith vs microservices, then focus on security: JWT, hashing passwords with bcrypt, input sanitization, helmet for HTTP headers, and rate limiting."
+    },
+    {
+      "question": "Given your experience with MongoDB, how do you handle data consistency and relationships between documents?",
+      "intention": "To gauge if the candidate understands document modeling vs relational modeling.",
+      "answer": "Discuss embedding vs referencing, Mongoose schema design, and when to use manual indexing for optimization."
+    }
+  ],
+  "behaviouralQuestions": [
+    {
+      "question": "Describe a time you encountered a technical roadblock during a project. How did you resolve it?",
+      "intention": "To assess problem-solving methodology and persistence.",
+      "answer": "Use the STAR method: Situation, Task, Action, Result. Highlight the research process, debugging steps, and the final solution."
+    },
+    {
+      "question": "How do you handle feedback from a senior developer during a code review?",
+      "intention": "To evaluate teamwork, humility, and eagerness to learn.",
+      "answer": "Emphasize being open-minded, asking clarifying questions, and viewing reviews as a learning opportunity rather than criticism."
+    }
+  ],
+  "skillsGaps": [
+    {
+      "skill": "TypeScript",
+      "severity": "medium"
+    },
+    {
+      "skill": "Agile Development Methodologies",
+      "severity": "low"
+    },
+    {
+      "skill": "Advanced Docker/Container Orchestration",
+      "severity": "low"
+    }
+  ],
+  "preparationPlan": [
+    {
+      "day": 1,
+      "focus": "TypeScript and Modern Patterns",
+      "tasks": [
+        "Learn core TypeScript interfaces and types",
+        "Refactor a small portion of your previous React code to TypeScript",
+        "Understand the benefits of static typing in large scale apps"
+      ]
+    },
+    {
+      "day": 2,
+      "focus": "Backend Security and Optimization",
+      "tasks": [
+        "Review JWT authentication flows",
+        "Practice API rate limiting in Express",
+        "Learn MongoDB aggregation framework and indexing"
+      ]
+    },
+    {
+      "day": 3,
+      "focus": "Docker and Cloud Deployment",
+      "tasks": [
+        "Create a Dockerfile for a Node.js/Express application",
+        "Review AWS basics like EC2 and S3 for static assets",
+        "Understand how to use Environment Variables effectively"
+      ]
+    },
+    {
+      "day": 4,
+      "focus": "Soft Skills and Mock Interviewing",
+      "tasks": [
+        "Practice answering technical and behavioural questions out loud",
+        "Review your past projects specifically from a 'why did you use this tech' perspective",
+        "Prepare 2-3 questions to ask the interviewer"
+      ]
+    }
+  ]
+}

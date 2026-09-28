@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 3000;
 
 databaseConnection();
 // invokeGeminiAI();
-generateInterviewReport({resume, selfDescription, jobDescription})
+// generateInterviewReport({resume, selfDescription, jobDescription})
 
 app.listen(PORT, () => {
     console.log(`server is started at port ${PORT}`);
