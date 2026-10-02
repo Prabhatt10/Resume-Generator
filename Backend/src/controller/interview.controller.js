@@ -1,7 +1,8 @@
 const { PDFParse } = require("pdf-parse");
 
-const {generateInterviewReport} = require("../services/ai.service");
+const { generateInterviewReport } = require("../services/ai.service");
 const interviewReportModel = require("../models/interviewReport.model.js");
+
 
 async function generateInterviewReportController(req, res) {
     try {
@@ -63,6 +64,88 @@ async function generateInterviewReportController(req, res) {
     }
 }
 
+
+async function getInterviewReportByIdContentController(req, res) {
+    try {
+
+        // IMPORTANT: route uses :interviewId
+        const { interviewId } = req.params;
+
+        console.log("Fetching interview report:", interviewId);
+
+        // Find report by ID
+        const interviewReport =
+            await interviewReportModel.findById(interviewId);
+
+        if (!interviewReport) {
+            return res.status(404).json({
+                status: "error",
+                message: "Interview report not found"
+            });
+        }
+
+        return res.status(200).json({
+            status: "success",
+            data: {
+                interviewReport
+            }
+        });
+
+    } catch (error) {
+        console.error(
+            "Error fetching interview report:",
+            error
+        );
+
+        return res.status(500).json({
+            status: "error",
+            message: "Failed to fetch interview report",
+            error: error.message
+        });
+    }
+}
+
+
+async function getAllInterviewReportController(req, res) {
+    try {
+
+        const interviewReports =
+            await interviewReportModel
+                .find({ user: req.user.id })
+                .sort({ createdAt: -1 })
+                .select("title -_id");
+
+        if (!interviewReports || interviewReports.length === 0) {
+            return res.status(404).json({
+                status: "error",
+                message: "No interview reports found"
+            });
+        }
+
+        return res.status(200).json({
+            status: "success",
+            data: {
+                interviewReports
+            }
+        });
+
+    } catch (error) {
+        console.error(
+            "Error fetching interview reports:",
+            error
+        );
+
+        return res.status(500).json({
+            status: "error",
+            message: "Failed to fetch interview reports",
+            error: error.message
+        });
+    }
+}
+
+
 module.exports = {
-    generateInterviewReportController
+    generateInterviewReportController,
+    getInterviewReportByIdContentController,
+    getAllInterviewReportController
 };

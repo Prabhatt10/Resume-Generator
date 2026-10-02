@@ -157,6 +157,12 @@ const interviewReportJsonSchema = {
                     "tasks"
                 ]
             }
+        },
+
+        title: {
+            type: "string",
+            description:
+                "The title of the job for which the interview report is generated."
         }
     },
 
@@ -165,7 +171,8 @@ const interviewReportJsonSchema = {
         "technicalQuestions",
         "behaviouralQuestions",
         "skillsGaps",
-        "preparationPlan"
+        "preparationPlan",
+        "title"
     ]
 };
 
