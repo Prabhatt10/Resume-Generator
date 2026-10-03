@@ -1,5 +1,8 @@
 const { GoogleGenAI } = require("@google/genai");
 const { z } = require("zod");
+const puppeteer = require("puppeteer")
+
+
 const {
     resume,
     selfDescription,
@@ -289,6 +292,78 @@ async function generateInterviewReport({
 }
 
 
+
+async function generatePDFfromHTML(htmlContent, outputPath) {
+    const browser = await puppeteer.launch({
+        headless: true,
+        args: [
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+            "--disable-dev-shm-usage"
+        ]
+    });
+
+    try {
+        const page = await browser.newPage();
+        // Initialize the page before setting HTML
+        await page.goto("about:blank", {
+            waitUntil: "load"
+        });
+        await page.setContent(htmlContent, {
+            waitUntil: "load",
+            timeout: 30000
+        });
+        const pdfBuffer = await page.pdf({
+            format: "A4",
+            printBackground: true
+        });
+        return pdfBuffer;
+    } finally {
+        await browser.close();
+    }
+}
+
+
+async function generateResumePDF({ resume, selfDescription, jobDescription }) {
+
+    const prompt = `Generate a resume in HTML format based on the following information:
+
+                Resume : ${resume}
+
+                Self Description : ${selfDescription}
+
+                Job Description : ${jobDescription}
+
+                The HTML should be well-structured and formatted, suitable for conversion to PDF.`;
+
+    const res = await client.models.generateContent({
+        model: "gemini-3-flash-preview",
+        contents: prompt,
+        config: {
+            responseMimeType: "application/json",
+            responseSchema: {
+                type: "object",
+                properties: {
+                    resumeHTML: {
+                        type: "string",
+                        description:
+                            "The html content of the resume which can be converted to pdf using any library like puppetteer"
+                    }
+                },
+                required: ["resumeHTML"]
+            }
+        }
+    });
+
+    const JSONContent = JSON.parse(res.text);
+
+    const pdfBuffer = await generatePDFfromHTML(JSONContent.resumeHTML);
+
+    return pdfBuffer;
+}
+
+
 module.exports = {
-    generateInterviewReport
+    generateInterviewReport,
+    generateResumePDF
 };
